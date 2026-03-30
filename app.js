@@ -1,5 +1,5 @@
 // 1. Asegúrate de que esta sea la llave que sacaste hoy
-const API_KEY = "AIzaSyAd9wwP_lkMMF9Wa7pb0HVr1dbGIGLV7QM"; 
+const API_KEY = "AIzaSyDYAvEDHMi-A3cSjUgSV2QnG2YSYcUGQ94"; 
 
 // 2. Usamos la versión v1beta y el modelo 2.0 que vimos en tu doc
 // Usaremos la versión 1.5 que tiene cuota gratuita garantizada
