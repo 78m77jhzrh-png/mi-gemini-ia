@@ -1,8 +1,8 @@
-// 1. CONFIGURACIÓN - ASEGÚRATE DE QUE TU KEY ESTÉ AQUÍ
+// 1. CONFIGURACIÓN
 const API_KEY = "AIzaSyDSrACwSY-5Ncc7bnnmkbWkZct2cCc3UvI"; 
 
-// URL para Gemini 1.5 Flash (Versión beta que es la más flexible)
-const API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${API_KEY}`;
+// URL para Gemini 1.5 Flash (La versión más estable y recomendada)
+const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
 const chatContainer = document.getElementById('chat-container');
 const userInput = document.getElementById('user-input');
@@ -25,37 +25,36 @@ async function pedirRespuestaIA(prompt) {
 
         const data = await response.json();
 
-        // Si la API responde con error, lo mostramos para saber qué pasa
         if (!response.ok) {
             console.error("Detalle del error:", data);
             return "Error de Google: " + (data.error?.message || "Revisa tu API Key.");
         }
 
-        // Extraer el texto de la respuesta
         if (data.candidates && data.candidates[0].content) {
             return data.candidates[0].content.parts[0].text;
         } else {
-            return "La IA recibió el mensaje pero no pudo generar una respuesta.";
+            return "La IA no pudo generar una respuesta. Intenta con otro mensaje.";
         }
 
     } catch (error) {
         console.error("Error de conexión:", error);
-        return "Error de red: No se pudo contactar con el servidor de Google.";
+        return "Error de red: No se pudo conectar con Google.";
     }
 }
 
-// 3. FUNCIÓN PARA MOSTRAR MENSAJES EN PANTALLA
+// 3. FUNCIÓN PARA MOSTRAR MENSAJES
 function crearMensaje(texto, esUsuario) {
-    // Borrar el saludo inicial la primera vez
+    // Borrar el saludo inicial si existe
     const saludo = document.querySelector('.text-center.mt-20');
     if (saludo) saludo.remove();
 
     const mensajeDiv = document.createElement('div');
     mensajeDiv.className = `flex ${esUsuario ? 'justify-end' : 'justify-start'} mb-6`;
 
+    // CORRECCIÓN: Quitamos el error de comillas en el style
     mensajeDiv.innerHTML = `
         <div class="${esUsuario ? 'bg-[#28292a] border border-gray-700' : 'bg-[#1e1f20]'} p-4 rounded-2xl max-w-[85%] shadow-md">
-            <p class="text-gray-200 style="white-space: pre-wrap;">${texto}</p>
+            <p class="text-gray-200" style="white-space: pre-wrap;">${texto}</p>
         </div>
     `;
 
@@ -68,11 +67,9 @@ async function enviarMensaje() {
     const texto = userInput.value.trim();
     if (texto === "") return;
 
-    // Mostrar lo que escribió el usuario
     crearMensaje(texto, true);
     userInput.value = "";
 
-    // Crear indicador de "escribiendo"
     const loading = document.createElement('div');
     loading.id = 'loading';
     loading.className = 'flex justify-start mb-6';
@@ -80,17 +77,15 @@ async function enviarMensaje() {
     chatContainer.appendChild(loading);
     chatContainer.scrollTop = chatContainer.scrollHeight;
 
-    // Obtener respuesta de la IA
     const respuesta = await pedirRespuestaIA(texto);
     
-    // Quitar el indicador de carga y mostrar respuesta
     const loadingElement = document.getElementById('loading');
     if (loadingElement) loadingElement.remove();
     
     crearMensaje(respuesta, false);
 }
 
-// 5. EVENTOS (CLICK Y ENTER)
+// 5. EVENTOS
 sendBtn.addEventListener('click', enviarMensaje);
 userInput.addEventListener('keypress', (e) => { 
     if (e.key === 'Enter') enviarMensaje(); 
