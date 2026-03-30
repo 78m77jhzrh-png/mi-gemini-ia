@@ -1,60 +1,54 @@
-// CONFIGURACIÓN
-const API_KEY = "AIzaSyDYAvEDHMi-A3cSjUgSV2QnG2YSYcUGQ94"; // Tu llave real
+// 1. Configuración básica
+const API_KEY = "AIzaSyDYAvEDHMi-A3cSjUgSV2QnG2YSYcUGQ94"; 
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
-// ELEMENTOS DE LA PÁGINA
-const chatContainer = document.getElementById("chat-container");
-const userInput = document.getElementById("user-input");
-const sendBtn = document.getElementById("send-btn");
+// 2. Verificar que los elementos existen antes de hacer nada
+window.onload = function() {
+    const sendBtn = document.getElementById("send-btn");
+    const userInput = document.getElementById("user-input");
+    const chatContainer = document.getElementById("chat-container");
 
-// FUNCIÓN PARA MOSTRAR MENSAJES EN LA PANTALLA
-function agregarMensaje(texto, autor) {
-    const div = document.createElement("div");
-    div.classList.add("mensaje", autor);
-    div.innerText = `${autor === "user" ? "Tú: " : "IA: "} ${texto}`;
-    chatContainer.appendChild(div);
-    chatContainer.scrollTop = chatContainer.scrollHeight; // Auto-scroll abajo
-}
-
-// FUNCIÓN QUE HABLA CON GOOGLE
-async function enviarMensaje() {
-    const mensaje = userInput.value.trim();
-    if (!mensaje) return;
-
-    // 1. Mostrar mensaje del usuario
-    agregarMensaje(mensaje, "user");
-    userInput.value = "";
-
-    try {
-        // 2. Llamada a la API
-        const respuesta = await fetch(API_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                contents: [{ parts: [{ text: mensaje }] }]
-            })
-        });
-
-        const data = await respuesta.json();
-
-        // 3. Manejo de errores de Google (Cuota, Llave, etc.)
-        if (data.error) {
-            throw new Error(data.error.message);
-        }
-
-        // 4. Mostrar respuesta de la IA
-        const respuestaIA = data.candidates[0].content.parts[0].text;
-        agregarMensaje(respuestaIA, "bot");
-
-    } catch (error) {
-        console.error("Error detallado:", error);
-        agregarMensaje(`Ups! Algo salió mal: ${error.message}`, "bot");
+    if (!sendBtn || !userInput || !chatContainer) {
+        console.error("ERROR: No se encontraron los elementos en el HTML. Revisa los IDs.");
+        return;
     }
-}
 
-// ESCUCHADORES DE EVENTOS (Los "cables")
-sendBtn.addEventListener("click", enviarMensaje);
+    // 3. Función para enviar
+    async function enviar() {
+        const texto = userInput.value.trim();
+        if (texto === "") return;
 
-userInput.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") enviarMensaje();
-});
+        // Mostrar lo que tú escribes
+        chatContainer.innerHTML += `<p><b>Tú:</b> ${texto}</p>`;
+        userInput.value = "";
+
+        try {
+            const res = await fetch(API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: texto }] }]
+                })
+            });
+
+            const data = await res.json();
+            
+            if (data.error) {
+                chatContainer.innerHTML += `<p style="color:red"><b>Error:</b> ${data.error.message}</p>`;
+            } else {
+                const respuestaIA = data.candidates[0].content.parts[0].text;
+                chatContainer.innerHTML += `<p><b>IA:</b> ${respuestaIA}</p>`;
+            }
+        } catch (e) {
+            chatContainer.innerHTML += `<p style="color:red"><b>Fallo de conexión.</b></p>`;
+        }
+        
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    // 4. Asignar los eventos
+    sendBtn.onclick = enviar;
+    userInput.onkeypress = (e) => { if (e.key === "Enter") enviar(); };
+    
+    console.log("Chat listo y conectado.");
+};
