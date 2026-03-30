@@ -2,7 +2,8 @@
 const API_KEY = "AIzaSyDSrACwSY-5Ncc7bnnmkbWkZct2cCc3UvI"; 
 
 // URL para Gemini 1.5 Flash (La versión más estable y recomendada)
-const API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+// Prueba con esta URL exacta (v1beta y gemini-1.5-flash)
+const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
 const chatContainer = document.getElementById('chat-container');
 const userInput = document.getElementById('user-input');
