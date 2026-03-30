@@ -3,7 +3,9 @@ const API_KEY = "AIzaSyCxE82AU3L0UdPVkqVhn8ismKiC8uylmR4";
 
 // Esta es la URL exacta que pide la documentación v1beta para GenerativeService
 // Cambiamos a gemini-pro, el modelo clásico que suele estar abierto para todos
-const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`;
+// Probemos con el nombre técnico completo que es más "oficial"
+const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${API_KEY}`;
+
 const chatContainer = document.getElementById('chat-container');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
