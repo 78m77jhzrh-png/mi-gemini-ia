@@ -5,8 +5,8 @@ const sendBtn = document.getElementById('send-btn');
 // TU LLAVE (Asegúrate de que no tenga espacios antes o después)
 const API_KEY = "AIzaSyDSrACwSY-5Ncc7bnnmkbWkZct2cCc3UvI"; 
 
-// URL Directa de Google (Sin proxies, es más seguro y rápido)
-const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+// Usamos la versión v1 (estable) y el nombre completo del modelo
+const API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
 async function pedirRespuestaIA(prompt) {
     try {
