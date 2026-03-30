@@ -1,9 +1,8 @@
 // 1. PEGA AQUÍ TU LLAVE NUEVA (Cuidado de no dejar espacios)
-const API_KEY = "AIzaSyC6D66AAFdwU-Y51cD7s55Ks1is25rsIDU"; 
+const API_KEY = "AIzaSyAb5lQpzEn2EMa3jhKMsBGX20bOMHySffo"; 
 
 // 2. ESTA ES LA URL QUE YA TE RECONOCIÓ EL SERVIDOR
-const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
-
+const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`;
 // ... (El resto de tu código de chat se queda igual)
 const chatContainer = document.getElementById('chat-container');
 const userInput = document.getElementById('user-input');
