@@ -1,13 +1,14 @@
+// 1. CONFIGURACIÓN - ASEGÚRATE DE QUE TU KEY ESTÉ AQUÍ
+const API_KEY = "AIzaSyDSrACwSY-5Ncc7bnnmkbWkZct2cCc3UvI"; 
+
+// URL para Gemini 1.5 Flash (Versión beta que es la más flexible)
+const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+
 const chatContainer = document.getElementById('chat-container');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
 
-// TU LLAVE (Asegúrate de que no tenga espacios antes o después)
-const API_KEY = "AIzaSyDSrACwSY-5Ncc7bnnmkbWkZct2cCc3UvI"; 
-
-// Usamos la versión v1 (estable) y el nombre completo del modelo
-const API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
-
+// 2. FUNCIÓN PARA LLAMAR A LA IA
 async function pedirRespuestaIA(prompt) {
     try {
         const response = await fetch(API_URL, {
@@ -22,38 +23,39 @@ async function pedirRespuestaIA(prompt) {
             })
         });
 
+        const data = await response.json();
+
+        // Si la API responde con error, lo mostramos para saber qué pasa
         if (!response.ok) {
-            const errorData = await response.json();
-            console.error("Error de la API:", errorData);
-            return "Error de la API: " + (errorData.error?.message || "No se pudo conectar.");
+            console.error("Detalle del error:", data);
+            return "Error de Google: " + (data.error?.message || "Revisa tu API Key.");
         }
 
-        const data = await response.json();
-        
-        // Verificamos que la respuesta tenga el formato correcto
-        if (data.candidates && data.candidates[0].content.parts[0].text) {
+        // Extraer el texto de la respuesta
+        if (data.candidates && data.candidates[0].content) {
             return data.candidates[0].content.parts[0].text;
         } else {
-            return "La IA no devolvió una respuesta válida.";
+            return "La IA recibió el mensaje pero no pudo generar una respuesta.";
         }
 
     } catch (error) {
-        console.error("Error de red:", error);
-        return "Error de red: No se pudo contactar con el servidor.";
+        console.error("Error de conexión:", error);
+        return "Error de red: No se pudo contactar con el servidor de Google.";
     }
 }
 
+// 3. FUNCIÓN PARA MOSTRAR MENSAJES EN PANTALLA
 function crearMensaje(texto, esUsuario) {
-    // Quitamos el saludo inicial si existe
-    const saludo = chatContainer.querySelector('.text-center');
+    // Borrar el saludo inicial la primera vez
+    const saludo = document.querySelector('.text-center.mt-20');
     if (saludo) saludo.remove();
 
     const mensajeDiv = document.createElement('div');
     mensajeDiv.className = `flex ${esUsuario ? 'justify-end' : 'justify-start'} mb-6`;
 
     mensajeDiv.innerHTML = `
-        <div class="${esUsuario ? 'bg-[#28292a] border border-gray-700' : ''} p-4 rounded-2xl max-w-[85%] shadow-sm">
-            <p class="text-gray-200 whitespace-pre-wrap">${texto}</p>
+        <div class="${esUsuario ? 'bg-[#28292a] border border-gray-700' : 'bg-[#1e1f20]'} p-4 rounded-2xl max-w-[85%] shadow-md">
+            <p class="text-gray-200 style="white-space: pre-wrap;">${texto}</p>
         </div>
     `;
 
@@ -61,33 +63,34 @@ function crearMensaje(texto, esUsuario) {
     chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
+// 4. FUNCIÓN PRINCIPAL DE ENVÍO
 async function enviarMensaje() {
     const texto = userInput.value.trim();
     if (texto === "") return;
 
-    // 1. Mostrar mensaje del usuario
+    // Mostrar lo que escribió el usuario
     crearMensaje(texto, true);
     userInput.value = "";
 
-    // 2. Mostrar indicador de carga
+    // Crear indicador de "escribiendo"
     const loading = document.createElement('div');
-    loading.id = 'loading-state';
+    loading.id = 'loading';
     loading.className = 'flex justify-start mb-6';
     loading.innerHTML = `<p class="text-blue-400 text-sm ml-4 animate-pulse">Gemini está pensando...</p>`;
     chatContainer.appendChild(loading);
     chatContainer.scrollTop = chatContainer.scrollHeight;
 
-    // 3. Pedir respuesta a Google
+    // Obtener respuesta de la IA
     const respuesta = await pedirRespuestaIA(texto);
     
-    // 4. Quitar indicador de carga y mostrar respuesta
-    const loadingElement = document.getElementById('loading-state');
+    // Quitar el indicador de carga y mostrar respuesta
+    const loadingElement = document.getElementById('loading');
     if (loadingElement) loadingElement.remove();
     
     crearMensaje(respuesta, false);
 }
 
-// Eventos de escucha
+// 5. EVENTOS (CLICK Y ENTER)
 sendBtn.addEventListener('click', enviarMensaje);
 userInput.addEventListener('keypress', (e) => { 
     if (e.key === 'Enter') enviarMensaje(); 
