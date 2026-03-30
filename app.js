@@ -1,8 +1,7 @@
 // 1. CONFIGURACIÓN
 const API_KEY = "AIzaSyCxE82AU3L0UdPVkqVhn8ismKiC8uylmR4"; 
 // Esta es la URL más compatible: versión v1 y modelo 1.5-flash
-const API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
-
+const API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${API_KEY}`;
 const chatContainer = document.getElementById('chat-container');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
