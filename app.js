@@ -2,8 +2,8 @@
 const API_KEY = "AIzaSyAd9wwP_lkMMF9Wa7pb0HVr1dbGIGLV7QM"; 
 
 // 2. Usamos la versión v1beta y el modelo 2.0 que vimos en tu doc
-const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
-
+// Usaremos la versión 1.5 que tiene cuota gratuita garantizada
+const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 const chatContainer = document.getElementById('chat-container');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
