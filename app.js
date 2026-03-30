@@ -1,5 +1,5 @@
 // 1. CONFIGURACIÓN
-const API_KEY = "AIzaSyDSrACwSY-5Ncc7bnnmkbWkZct2cCc3UvI"; 
+const API_KEY = "AIzaSyCxE82AU3L0UdPVkqVhn8ismKiC8uylmR4"; 
 
 // Esta es la URL exacta que pide la documentación v1beta para GenerativeService
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
