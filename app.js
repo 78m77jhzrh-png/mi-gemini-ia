@@ -1,11 +1,8 @@
 // 1. CONFIGURACIÓN
 const API_KEY = "AIzaSyCxE82AU3L0UdPVkqVhn8ismKiC8uylmR4"; 
+// Esta es la URL más compatible: versión v1 y modelo 1.5-flash
+const API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
-// Esta es la URL exacta que pide la documentación v1beta para GenerativeService
-// Cambiamos a gemini-pro, el modelo clásico que suele estar abierto para todos
-// Probemos con el nombre técnico completo que es más "oficial"
-// Esta es la versión que NUNCA falla en cuentas personales de Gmail
-const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`;
 const chatContainer = document.getElementById('chat-container');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
