@@ -1,8 +1,7 @@
-// 1. Asegúrate de que esta sea la llave que sacaste hoy
+// Asegúrate de que la llave esté completa entre las comillas
 const API_KEY = "AIzaSyDYAvEDHMi-A3cSjUgSV2QnG2YSYcUGQ94"; 
 
-// 2. Usamos la versión v1beta y el modelo 2.0 que vimos en tu doc
-// Usaremos la versión 1.5 que tiene cuota gratuita garantizada
+// Esta es la URL que NO debe fallar:
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 const chatContainer = document.getElementById('chat-container');
 const userInput = document.getElementById('user-input');
